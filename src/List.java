@@ -45,6 +45,18 @@ public class List {
         s+="]";
         return s;
     }
+    public boolean estDans(int ligne,int cologne){
+        Maillon a = tete;
+
+        while(a!=null){
+            if(a.getLigne()==ligne && a.getColonne()==cologne)
+                return true;
+            a=a.getSuiv();
+        }
+        return false;
+
+    }
+
 
     public int getVoisines(int ligne, int colonne){
         Maillon a = tete;

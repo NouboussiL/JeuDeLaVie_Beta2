@@ -6,16 +6,16 @@ import java.util.regex.Pattern;
 import javax.swing.*;
 
 public class Main {
-    private static int ll=0;
-    private static int lc=0;
-    static int lmin=Integer.MAX_VALUE;
-    static int lmax=Integer.MIN_VALUE;
-    static int cmin=Integer.MAX_VALUE;
-    static int cmax=Integer.MIN_VALUE;
+    private static int ll = 0;
+    private static int lc = 0;
+    static int lmin = Integer.MAX_VALUE;
+    static int lmax = Integer.MIN_VALUE;
+    static int cmin = Integer.MAX_VALUE;
+    static int cmax = Integer.MIN_VALUE;
 
 
-    public static void main(String[] args){
-        List grille = new List();
+    public static void main(String[] args) {
+
         /*
         for(int i = 0; i< 5; i++){
             for(int j =5; j>-1;j--){
@@ -23,23 +23,21 @@ public class Main {
             }
         }
         */
+        /*Frame frame = new Frame(ll,lc);
+
+        dessinerMatrice(frame,grille);*/
+
+        List grille = new List();
         lireFichier(grille);
         System.out.println(grille.toString());
-        System.out.println(grille.getVoisines(-3,-16));
-        Frame frame = new Frame(ll,lc);
+        List ng = genSuivante(grille);
+        System.out.println(ng.toString());
 
-        dessinerMatrice(frame,grille);
 
-        for(int i = 0; i<1000;i++){
-            grille = calculerNextGen(grille);
-            resetMatrice(frame);
-            dessinerMatrice(frame,grille);
-        }
-        System.out.println(grille.toString());
     }
 
 
-    public static void resetMatrice(Frame frame){
+    public static void resetMatrice(Frame frame) {
         frame.remove(frame.pannel);
         frame.revalidate();
         frame.repaint();
@@ -47,7 +45,7 @@ public class Main {
     }
 
 
-    public static void dessinerMatrice(Frame frame,List grille){
+    public static void dessinerMatrice(Frame frame, List grille) {
         frame.pannel.removeAll();
         frame.dessinerMatrice(grille);
 /*
@@ -71,7 +69,7 @@ public class Main {
             }
         }
         */
-        frame.add( frame.pannel);
+        frame.add(frame.pannel);
         frame.setVisible(true);
         try {
             Thread.sleep(1000);
@@ -83,14 +81,57 @@ public class Main {
         frame.repaint();
     }
 
-    public static void lireFichier(List grille){
 
-        try{
+    public static List genSuivante(List grille) {
+        List ng = new List();
+        Maillon a = grille.tete;
+        while (a != null) {
+            verifierLesMortes(a.getLigne(), a.getColonne(), grille, ng);
+            verifierSurvie(a.getLigne(), a.getColonne(), grille, ng);
+            a = a.getSuiv();
+        }
+        return ng;
+    }
 
-            int ligne=0;
-            int colonne=0;
-            Scanner fs = new Scanner(new File("lifep/EDEN.LIF"));
-            while(fs.hasNextLine()){
+    private static void verifierLesMortes(int ligne, int colonne, List grille, List ng) {
+        //couples qui designent les vecteur pour les 8 directions
+        Couple[] tc = {
+
+                new Couple(-1, -1),
+                new Couple(-1, 1),
+                new Couple(1, -1),
+                new Couple(1, 1),
+                new Couple(0, 1),
+                new Couple(0, -1),
+                new Couple(1, 0),
+                new Couple(-1, 0),};
+        //rechercher les cases mortes dans chaque direction
+        for (Couple vect : tc) {
+            if (!grille.estDans(ligne + vect.getLigne(), colonne + vect.getColonne())) {
+                //alors la case est vide car n'est pas dans la liste
+                if (calculerVoisines(ligne + vect.getLigne(), colonne + vect.getColonne(), grille) == 3) {
+                    if (!ng.estDans(ligne + vect.getLigne(), colonne + vect.getColonne()))
+                        //"its ALIVE!"(nb voisines est 3 et elle est pas encore presente
+                        ng.addMaillon(new Maillon(ligne + vect.getLigne(), colonne + vect.getColonne()));
+
+                }
+            }
+        }
+    }
+
+    private static void verifierSurvie(int ligne, int colonne, List grille, List ng) {
+        if (calculerVoisines(ligne, colonne, grille) == 2 || calculerVoisines(ligne, colonne, grille) == 3)
+            ng.addMaillon(new Maillon(ligne, colonne));
+    }
+
+    public static void lireFichier(List grille) {
+
+        try {
+
+            int ligne = 0;
+            int colonne = 0;
+            Scanner fs = new Scanner(new File("lifep/ACORN.LIF"));
+            while (fs.hasNextLine()) {
                 String s = fs.nextLine();
                 String[] s2 = s.split(" ");
                 if (s2[0].equals("#P")) {
@@ -98,54 +139,39 @@ public class Main {
                     colonne = Integer.parseInt(s2[1]);
                     ligne = Integer.parseInt(s2[2]);
 
-                    if(ligne<lmin)lmin=ligne;
-                    if(colonne<cmin)cmin=colonne;
+                    if (ligne < lmin)
+                        lmin = ligne;
+                    if (colonne < cmin)
+                        cmin = colonne;
 
-                }else {
+                } else {
                     for (int i = 0; i < s.length(); i++) {
                         char c = s.charAt(i);
                         if (c == '*') {
-                            Maillon maillon = new Maillon(ligne, i+colonne);
-                            if((i+colonne)>cmax)cmax=i+colonne;
+                            Maillon maillon = new Maillon(ligne, i + colonne);
+                            if ((i + colonne) > cmax)
+                                cmax = i + colonne;
                             grille.addMaillon(maillon);
                         }
                     }
-                    ligne++;
-                    if(ligne>lmax)lmax=ligne;
+                    ligne--;
+                    if (ligne > lmax)
+                        lmax = ligne;
                 }
 
 
             }
-            ll = lmax-lmin;
-            lc=cmax-cmin;
-            System.out.println(ll+"  "+lc);
-        }catch (FileNotFoundException e) {
+            ll = lmax - lmin;
+            lc = cmax - cmin;
+            System.out.println(ll + "  " + lc);
+        } catch (FileNotFoundException e) {
             System.out.print(e.getMessage());
         }
     }
 
-    private static int calculerVoisines(int x,int y,List grille){
-        return grille.getVoisines(x,y);
+    private static int calculerVoisines(int x, int y, List grille) {
+        return grille.getVoisines(x, y);
     }
 
-    private static List calculerNextGen(List grille){
-        List nextGen = new List();
-        Maillon a = grille.tete;
-        int sum =0;
-        for(int i = lmin; i< lmax;i++) {
-            System.out.println("ligne "+i+"\n_________");
-            for (int j = cmin; j < cmax; j++) {
-                sum = calculerVoisines(i,j,grille);
-                if (a != null){
-                    System.out.println(a.toString());
-                    if ((a.getLigne()) == j && (a.getColonne()) == i) {
-                        if(sum == 2 || sum == 3) nextGen.addMaillon(new Maillon(i,j));
-                        a = a.getSuiv();
-                    }
-                }
-                if(sum==3)nextGen.addMaillon(new Maillon(i,j));
-            }
-        }
-        return nextGen;
-    }
+
 }
