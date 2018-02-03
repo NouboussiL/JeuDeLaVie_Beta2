@@ -83,20 +83,21 @@ public class Main {
 
 
     public static List genSuivante(List grille) {
-        List ng = new List();
+        List ngen = new List();
+        List declaresMortes =new List();
         Maillon a = grille.tete;
+
         while (a != null) {
-            verifierLesMortes(a.getLigne(), a.getColonne(), grille, ng);
-            verifierSurvie(a.getLigne(), a.getColonne(), grille, ng);
+            verifierLesMortes(a.getLigne(), a.getColonne(), grille, ngen,declaresMortes);
+            verifierSurvie(a.getLigne(), a.getColonne(), grille, ngen);
             a = a.getSuiv();
         }
-        return ng;
+        return ngen;
     }
 
-    private static void verifierLesMortes(int ligne, int colonne, List grille, List ng) {
+    private static void verifierLesMortes(int ligne, int colonne, List grille, List ng, List declaresMortes) {
         //couples qui designent les vecteur pour les 8 directions
         Couple[] tc = {
-
                 new Couple(-1, -1),
                 new Couple(-1, 1),
                 new Couple(1, -1),
@@ -107,13 +108,19 @@ public class Main {
                 new Couple(-1, 0),};
         //rechercher les cases mortes dans chaque direction
         for (Couple vect : tc) {
-            if (!grille.estDans(ligne + vect.getLigne(), colonne + vect.getColonne())) {
-                //alors la case est vide car n'est pas dans la liste
+            if (!grille.estDans(ligne + vect.getLigne(), colonne + vect.getColonne())&&
+                    !ng.estDans(ligne + vect.getLigne(), colonne + vect.getColonne())&&
+                    !declaresMortes.estDans(ligne + vect.getLigne(), colonne + vect.getColonne())) {
+                //alors la case n'est pas dans la grille donc morte,n'as pas encore été
+                // declaré definitivement morte et n'est pas encore été déclaré comme naissante
                 if (calculerVoisines(ligne + vect.getLigne(), colonne + vect.getColonne(), grille) == 3) {
                     if (!ng.estDans(ligne + vect.getLigne(), colonne + vect.getColonne()))
                         //"its ALIVE!"(nb voisines est 3 et elle est pas encore presente
                         ng.addMaillon(new Maillon(ligne + vect.getLigne(), colonne + vect.getColonne()));
-
+                }else
+                {
+                    //elle est morte
+                    declaresMortes.addMaillon(new Maillon(ligne + vect.getLigne(), colonne + vect.getColonne()));
                 }
             }
         }
@@ -135,15 +142,12 @@ public class Main {
                 String s = fs.nextLine();
                 String[] s2 = s.split(" ");
                 if (s2[0].equals("#P")) {
-
                     colonne = Integer.parseInt(s2[1]);
                     ligne = Integer.parseInt(s2[2]);
-
                     if (ligne < lmin)
                         lmin = ligne;
                     if (colonne < cmin)
                         cmin = colonne;
-
                 } else {
                     for (int i = 0; i < s.length(); i++) {
                         char c = s.charAt(i);
@@ -158,8 +162,6 @@ public class Main {
                     if (ligne > lmax)
                         lmax = ligne;
                 }
-
-
             }
             ll = lmax - lmin;
             lc = cmax - cmin;
