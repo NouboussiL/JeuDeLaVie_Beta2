@@ -28,13 +28,29 @@ public class Main {
             }
         }
         */
-        /*Frame frame = new Frame(ll,lc);
 
-        dessinerMatrice(frame,grille);*/
+
+
 
         List grille = new List();
         lireFichier(grille);
+        Frame frame = new Frame(ll,lc);
         System.out.println(grille.toString());
+        dessinerMatrice(frame,grille);
+        try {
+            Thread.sleep(3000);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        for(int i =0; i <1000; i++){
+            grille = genSuivante(grille);
+            resetMatrice(frame);
+            dessinerMatrice(frame,grille);
+        }
+
         List ng = genSuivante(grille);
         System.out.println(ng.toString());
 
@@ -77,7 +93,7 @@ public class Main {
         frame.add(frame.pannel);
         frame.setVisible(true);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(300);
 
         } catch (InterruptedException e) {
             e.printStackTrace();

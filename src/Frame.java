@@ -3,7 +3,7 @@ import java.awt.*;
 public class Frame extends JFrame {
     JPanel2 pannel=new JPanel2();
     int ll,lc;
-
+    int taille;
 
 
 
@@ -11,7 +11,8 @@ public class Frame extends JFrame {
         super("Cyka nuggets");
         this.lc=lc;
         this.ll=ll;
-        setSize(5*2*this.lc, 5*2*this.ll);
+        this.taille = /*lc>ll ? lc : ll*/50;
+        setSize(5*2*taille, 5*2*taille);
         setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //pannel.setLayout(new GridLayout(2*this.ll, 2*lc));
@@ -19,7 +20,7 @@ public class Frame extends JFrame {
     }
 
     public void dessinerMatrice(List grille){
-        pannel = new JPanel2(grille,ll,lc);
+        pannel = new JPanel2(grille,taille,taille);
     }
 
 
@@ -44,7 +45,7 @@ public class Frame extends JFrame {
         public void paintComponent(Graphics g){
             Maillon a = grille.tete;
             while(a!=null){
-                g.fillOval(5*(this.colonne+a.getColonne()),5*(this.ligne+a.getLigne()),5,5);
+                g.fillOval(5*(this.colonne+a.getColonne()),5*(this.ligne/2-a.getLigne()),5,5);
                 a=a.getSuiv();
             }
 
