@@ -88,8 +88,11 @@ public class Main {
         Maillon a = grille.tete;
 
         while (a != null) {
-            verifierLesMortes(a.getLigne(), a.getColonne(), grille, ngen,declaresMortes);
-            verifierSurvie(a.getLigne(), a.getColonne(), grille, ngen);
+            int ligne = a.getLigne();
+            int colonne = a.getColonne();
+
+            verifierLesMortes(ligne, colonne, grille, ngen,declaresMortes);
+            verifierSurvie(ligne, colonne, grille, ngen);
             a = a.getSuiv();
         }
         return ngen;
@@ -105,29 +108,41 @@ public class Main {
                 new Couple(0, 1),
                 new Couple(0, -1),
                 new Couple(1, 0),
-                new Couple(-1, 0),};
+                new Couple(-1, 0)};
+
+        boolean dansGrille, dansNG, dansMortes;
         //rechercher les cases mortes dans chaque direction
         for (Couple vect : tc) {
-            if (!grille.estDans(ligne + vect.getLigne(), colonne + vect.getColonne())&&
-                    !ng.estDans(ligne + vect.getLigne(), colonne + vect.getColonne())&&
-                    !declaresMortes.estDans(ligne + vect.getLigne(), colonne + vect.getColonne())) {
+            //ligne et colonne du vecteur
+            int ligneVect = vect.getLigne();
+            int colonneVect = vect.getColonne();
+
+            //
+            dansGrille = grille.estDans(ligne + ligneVect, colonne + colonneVect);
+            dansNG = ng.estDans(ligne + ligneVect, colonne + colonneVect);
+            dansMortes = declaresMortes.estDans(ligne + ligneVect, colonne + colonneVect);
+
+
+            if (!dansGrille && !dansNG && !dansMortes) {
                 //alors la case n'est pas dans la grille donc morte,n'as pas encore été
                 // declaré definitivement morte et n'est pas encore été déclaré comme naissante
-                if (calculerVoisines(ligne + vect.getLigne(), colonne + vect.getColonne(), grille) == 3) {
-                    if (!ng.estDans(ligne + vect.getLigne(), colonne + vect.getColonne()))
+                int nbVoisines = calculerVoisines(ligne + ligneVect, colonne + colonneVect, grille);
+                if (nbVoisines== 3) {
+                    if (!dansNG)
                         //"its ALIVE!"(nb voisines est 3 et elle est pas encore presente
-                        ng.addMaillon(new Maillon(ligne + vect.getLigne(), colonne + vect.getColonne()));
+                        ng.addMaillon(new Maillon(ligne + ligneVect, colonne + colonneVect));
                 }else
                 {
                     //elle est morte
-                    declaresMortes.addMaillon(new Maillon(ligne + vect.getLigne(), colonne + vect.getColonne()));
+                    declaresMortes.addMaillon(new Maillon(ligne + ligneVect, colonne + colonneVect));
                 }
             }
         }
     }
 
     private static void verifierSurvie(int ligne, int colonne, List grille, List ng) {
-        if (calculerVoisines(ligne, colonne, grille) == 2 || calculerVoisines(ligne, colonne, grille) == 3)
+        int nbVoisines=calculerVoisines(ligne, colonne, grille);
+        if ( nbVoisines == 2 || nbVoisines == 3)
             ng.addMaillon(new Maillon(ligne, colonne));
     }
 
@@ -140,8 +155,8 @@ public class Main {
             Scanner fs = new Scanner(new File("lifep/ACORN.LIF"));
             while (fs.hasNextLine()) {
                 String s = fs.nextLine();
-                String[] s2 = s.split(" ");
-                if (s2[0].equals("#P")) {
+                if (s.matches("^#P.*")) {
+                    String[] s2 = s.split(" ");
                     colonne = Integer.parseInt(s2[1]);
                     ligne = Integer.parseInt(s2[2]);
                     if (ligne < lmin)
@@ -166,6 +181,8 @@ public class Main {
             ll = lmax - lmin;
             lc = cmax - cmin;
             System.out.println(ll + "  " + lc);
+
+            fs.close();
         } catch (FileNotFoundException e) {
             System.out.print(e.getMessage());
         }

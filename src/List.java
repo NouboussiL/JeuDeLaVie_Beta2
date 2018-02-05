@@ -45,11 +45,11 @@ public class List {
         s+="]";
         return s;
     }
-    public boolean estDans(int ligne,int cologne){
+    public boolean estDans(int ligne,int colonne){
         Maillon a = tete;
 
         while(a!=null){
-            if(a.getLigne()==ligne && a.getColonne()==cologne)
+            if(a.getLigne()==ligne && a.getColonne()==colonne)
                 return true;
             a=a.getSuiv();
         }

@@ -1,5 +1,5 @@
 public class Maillon implements Comparable{
-    private Couple i;
+
     private int ligne;
     private int colonne;
     private Maillon suiv;
@@ -18,9 +18,6 @@ public class Maillon implements Comparable{
     }
 
 
-    public Couple getInfo(){
-        return i;
-    }
 
     public int getLigne(){
         return ligne;
