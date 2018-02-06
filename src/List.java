@@ -1,13 +1,17 @@
 public class List {
 
     Maillon tete;
+    int longueurColonne;
+    int longueurLigne;
 
     public List(){
         tete = null;
     }
 
     public void addMaillon(Maillon maillon){
-        if(tete == null) tete = maillon;
+        if(tete == null){
+            tete = maillon;
+        }
         else{
             if(maillon.compareTo(tete)==-1){
                 maillon.setSuivant(tete);
@@ -45,6 +49,8 @@ public class List {
         s+="]";
         return s;
     }
+
+
     public boolean estDans(int ligne,int colonne){
         Maillon a = tete;
 

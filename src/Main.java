@@ -12,7 +12,14 @@ public class Main {
     static int lmax = Integer.MIN_VALUE;
     static int cmin = Integer.MAX_VALUE;
     static int cmax = Integer.MIN_VALUE;
+    static int taille;
 
+
+    public enum Mondes{
+        CIRCULAIRE,
+        FRONTIERE,
+        INFINI;
+    }
 
     public static void main(String[] args) {
 
@@ -28,6 +35,11 @@ public class Main {
             }
         }
         */
+        int i =1;
+        for(Mondes monde : Mondes.values()){
+            System.out.println(i+" : "+monde);
+            i++;
+        }
 
 
 
@@ -45,7 +57,7 @@ public class Main {
         }
 
 
-        for(int i =0; i <1000; i++){
+        for(i =0; i <1000; i++){
             grille = genSuivante(grille);
             resetMatrice(frame);
             dessinerMatrice(frame,grille);
