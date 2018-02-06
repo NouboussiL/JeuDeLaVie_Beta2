@@ -44,19 +44,17 @@ public class Main {
         lireFichier(grille);
         Frame frame = new Frame(ll,lc);
         System.out.println(grille.toString());
-        dessinerMatrice(frame,grille);
-        try {
-            Thread.sleep(3000);
+        //dessinerMatrice(frame,grille);
 
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
 
         for(i =0; i <1000; i++){
             grille = genSuivante(grille);
-            resetMatrice(frame);
-            dessinerMatrice(frame,grille);
+            System.out.println(grille.toString());
+
+
+            //resetMatrice(frame);
+            //dessinerMatrice(frame,grille);
         }
 
         List ng = genSuivante(grille);
@@ -101,7 +99,7 @@ public class Main {
         frame.add(frame.pannel);
         frame.setVisible(true);
         try {
-            Thread.sleep(300);
+            Thread.sleep(100);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -181,7 +179,7 @@ public class Main {
 
             int ligne = 0;
             int colonne = 0;
-            Scanner fs = new Scanner(new File("lifep/EDEN.LIF"));
+            Scanner fs = new Scanner(new File("lifep/AQUA40.LIF"));
             while (fs.hasNextLine()) {
                 String s = fs.nextLine();
                 if (s.matches("^#P.*")) {
