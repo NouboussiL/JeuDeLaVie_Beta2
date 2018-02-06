@@ -12,7 +12,7 @@ public class Frame extends JFrame {
         this.lc=lc;
         this.ll=ll;
         this.taille = /*lc>ll ? lc : ll*/50;
-        setSize(5*2*taille, 5*2*taille);
+        setSize(10*2*taille, 10*2*taille);
         setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //pannel.setLayout(new GridLayout(2*this.ll, 2*lc));
@@ -45,7 +45,7 @@ public class Frame extends JFrame {
         public void paintComponent(Graphics g){
             Maillon a = grille.tete;
             while(a!=null){
-                g.fillOval(5*(this.colonne+a.getColonne()),5*(this.ligne/2-a.getLigne()),5,5);
+                g.fillOval(10*(colonne+a.getColonne()),10*(ligne-a.getLigne()),10,10);
                 a=a.getSuiv();
             }
 

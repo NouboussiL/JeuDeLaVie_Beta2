@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -9,7 +11,7 @@ public class Main {
     private static int ll = 0;
     private static int lc = 0;
     static int taille;
-
+    static Mondes monde;
 
     public enum Mondes{
         CIRCULAIRE,
@@ -31,17 +33,36 @@ public class Main {
             }
         }
         */
+
+
+        //Choix du type de monde à lancer
+        System.out.println("Choisissez le type de monde");
         int i =1;
         for(Mondes monde : Mondes.values()){
-            System.out.println(i+" : "+monde);
+            System.out.println("    "+i+" : "+monde);
             i++;
+        }
+
+        String s = new Scanner(System.in).next();
+        int menu = Integer.parseInt(s);
+        switch(menu){
+            case 1 : monde = Mondes.CIRCULAIRE;
+                break;
+            case 2 : monde = Mondes.FRONTIERE;
+                break;
+            case 3 : monde = Mondes.INFINI;
+        }
+
+
+        if(monde != Mondes.INFINI) {
+            System.out.print("Taille de la grille : ");
+            taille = Integer.parseInt(new Scanner(System.in).next());
         }
 
 
 
-
         List grille = new List();
-        lireFichier(grille);
+        lireFichier(grille,monde);
         Frame frame = new Frame(ll,lc);
         System.out.println(grille.toString());
         dessinerMatrice(frame,grille);
@@ -142,28 +163,28 @@ public class Main {
         boolean dansGrille, dansNG, dansMortes;
         //rechercher les cases mortes dans chaque direction
         for (Couple vect : tc) {
-            //ligne et colonne du vecteur
-            int ligneVect = vect.getLigne();
-            int colonneVect = vect.getColonne();
+            //ligne et colonne de la case morte voisine à la case vivante
+            int ligneVoisine = ligne + vect.getLigne();
+            int colonneVoisine = colonne + vect.getColonne();
 
-            //
-            dansGrille = grille.estDans(ligne + ligneVect, colonne + colonneVect);
-            dansNG = ng.estDans(ligne + ligneVect, colonne + colonneVect);
-            dansMortes = declaresMortes.estDans(ligne + ligneVect, colonne + colonneVect);
+            //regarder si la voisine est dans l'une des grilles
+            dansGrille = grille.estDans(ligneVoisine, colonneVoisine);
+            dansNG = ng.estDans(ligneVoisine, colonneVoisine);
+            dansMortes = declaresMortes.estDans(ligneVoisine, colonneVoisine);
 
 
             if (!dansGrille && !dansNG && !dansMortes) {
                 //alors la case n'est pas dans la grille donc morte,n'as pas encore été
                 // declaré definitivement morte et n'est pas encore été déclaré comme naissante
-                int nbVoisines = calculerVoisines(ligne + ligneVect, colonne + colonneVect, grille);
+                int nbVoisines = calculerVoisines(ligneVoisine, colonneVoisine, grille);
                 if (nbVoisines== 3) {
                     if (!dansNG)
                         //"its ALIVE!"(nb voisines est 3 et elle est pas encore presente
-                        ng.addMaillon(new Maillon(ligne + ligneVect, colonne + colonneVect));
+                        ng.addMaillon(new Maillon(ligneVoisine, colonneVoisine));
                 }else
                 {
                     //elle est morte
-                    declaresMortes.addMaillon(new Maillon(ligne + ligneVect, colonne + colonneVect));
+                    declaresMortes.addMaillon(new Maillon(ligneVoisine, colonneVoisine));
                 }
             }
         }
@@ -175,13 +196,21 @@ public class Main {
             ng.addMaillon(new Maillon(ligne, colonne));
     }
 
-    public static void lireFichier(List grille) {
-
+    public static void lireFichier(List grille,Mondes monde) {
+        int ligneMax,colonneMax,ligneMin,colonneMin;
         try {
+            if(monde != Mondes.INFINI){
+                ligneMax=colonneMax = taille/2;
+                ligneMin = colonneMin = taille/2+1;
 
+            }else{
+                ligneMax=colonneMax = Integer.MAX_VALUE;
+                ligneMin = colonneMin = Integer.MIN_VALUE;
+            }
             int ligne = 0;
             int colonne = 0;
-            Scanner fs = new Scanner(new File("lifep/EDEN.LIF"));
+
+            Scanner fs = new Scanner(new File("lifep/AQUA40.LIF"));
             while (fs.hasNextLine()) {
                 String s = fs.nextLine();
                 if (s.matches("^#P.*")) {
