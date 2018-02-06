@@ -44,7 +44,7 @@ public class Main {
         lireFichier(grille);
         Frame frame = new Frame(ll,lc);
         System.out.println(grille.toString());
-        //dessinerMatrice(frame,grille);
+        dessinerMatrice(frame,grille);
 
 
 
@@ -52,9 +52,8 @@ public class Main {
             grille = genSuivante(grille);
             System.out.println(grille.toString());
 
-
-            //resetMatrice(frame);
-            //dessinerMatrice(frame,grille);
+            resetMatrice(frame);
+            dessinerMatrice(frame,grille);
         }
 
         List ng = genSuivante(grille);
