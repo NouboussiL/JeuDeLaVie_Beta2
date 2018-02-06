@@ -1,6 +1,10 @@
 public class List {
 
     Maillon tete;
+    int lmin = Integer.MAX_VALUE;
+    int lmax = Integer.MIN_VALUE;
+    int cmin = Integer.MAX_VALUE;
+    int cmax = Integer.MIN_VALUE;
     int longueurColonne;
     int longueurLigne;
 
@@ -11,11 +15,15 @@ public class List {
     public void addMaillon(Maillon maillon){
         if(tete == null){
             tete = maillon;
+            insere(maillon.getLigne(),maillon.getColonne());
         }
         else{
+            int ligne = maillon.getLigne();
+            int colonne = maillon.getColonne();
             if(maillon.compareTo(tete)==-1){
                 maillon.setSuivant(tete);
                 tete = maillon;
+                insere(ligne,colonne);
             }else{
                 int comp=-1;
                 Maillon a =tete.getSuiv();
@@ -28,10 +36,20 @@ public class List {
                 if(comp != 0) {
                     maillon.setSuivant(a);
                     b.setSuivant(maillon);
+                    insere(ligne,colonne);
                 }
             }
 
         }
+    }
+
+    private void insere(int ligne, int colonne){
+        cmin = cmin > colonne ? colonne : cmin;
+        cmax = cmax>colonne ? cmax : colonne;
+        lmin = lmin > ligne ? ligne : lmin;
+        lmax = lmax >ligne ? lmax : ligne;
+        longueurColonne = cmax-cmin+1;
+        longueurLigne = lmax-lmin+1;
     }
 
     @Override
@@ -83,5 +101,13 @@ public class List {
 
     public void removeMaillon(int ligne,int colonne){
 
+    }
+
+    public int getLongueurColonne(){
+        return longueurColonne;
+    }
+
+    public int getLongueurLigne(){
+        return longueurLigne;
     }
 }

@@ -8,10 +8,6 @@ import javax.swing.*;
 public class Main {
     private static int ll = 0;
     private static int lc = 0;
-    static int lmin = Integer.MAX_VALUE;
-    static int lmax = Integer.MIN_VALUE;
-    static int cmin = Integer.MAX_VALUE;
-    static int cmax = Integer.MIN_VALUE;
     static int taille;
 
 
@@ -185,35 +181,25 @@ public class Main {
 
             int ligne = 0;
             int colonne = 0;
-            Scanner fs = new Scanner(new File("lifep/ACORN.LIF"));
+            Scanner fs = new Scanner(new File("lifep/EDEN.LIF"));
             while (fs.hasNextLine()) {
                 String s = fs.nextLine();
                 if (s.matches("^#P.*")) {
                     String[] s2 = s.split(" ");
                     colonne = Integer.parseInt(s2[1]);
                     ligne = Integer.parseInt(s2[2]);
-                    if (ligne < lmin)
-                        lmin = ligne;
-                    if (colonne < cmin)
-                        cmin = colonne;
                 } else {
                     for (int i = 0; i < s.length(); i++) {
                         char c = s.charAt(i);
                         if (c == '*') {
                             Maillon maillon = new Maillon(ligne, i + colonne);
-                            if ((i + colonne) > cmax)
-                                cmax = i + colonne;
                             grille.addMaillon(maillon);
                         }
                     }
                     ligne--;
-                    if (ligne > lmax)
-                        lmax = ligne;
                 }
             }
-            ll = lmax - lmin;
-            lc = cmax - cmin;
-            System.out.println(ll + "  " + lc);
+            System.out.println(grille.getLongueurLigne()+ "  " + grille.getLongueurColonne());
 
             fs.close();
         } catch (FileNotFoundException e) {
