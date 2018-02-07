@@ -8,8 +8,6 @@ import java.util.regex.Pattern;
 import javax.swing.*;
 
 public class Main {
-    private static int ll = 0;
-    private static int lc = 0;
     static int taille;
     static Mondes monde;
 
@@ -34,7 +32,7 @@ public class Main {
         }
         */
 
-
+        /*
         //Choix du type de monde à lancer
         System.out.println("Choisissez le type de monde");
         int i =1;
@@ -60,12 +58,18 @@ public class Main {
         }
 
 
-
+        */
         List grille = new List();
         lireFichier(grille,monde);
-        Frame frame = new Frame(ll,lc);
-        System.out.println(grille.toString());
+        Frame frame = new Frame(grille);
+
+
         dessinerMatrice(frame,grille);
+
+        System.out.println(frame.getHeight());
+        System.out.println(frame.getWidth());
+
+        System.out.println(grille.toString());
         try {
             Thread.sleep(3000);
 
@@ -74,7 +78,7 @@ public class Main {
         }
 
 
-        for(i =0; i <1000; i++){
+        for(int i =0; i <1000; i++){
             grille = genSuivante(grille);
             resetMatrice(frame);
             dessinerMatrice(frame,grille);
@@ -149,6 +153,9 @@ public class Main {
     }
 
     private static void verifierLesMortes(int ligne, int colonne, List grille, List ng, List declaresMortes) {
+
+
+
         //couples qui designent les vecteur pour les 8 directions
         Couple[] tc = {
                 new Couple(-1, -1),
@@ -210,7 +217,7 @@ public class Main {
             int ligne = 0;
             int colonne = 0;
 
-            Scanner fs = new Scanner(new File("lifep/AQUA40.LIF"));
+            Scanner fs = new Scanner(new File("lifep/PI.LIF"));
             while (fs.hasNextLine()) {
                 String s = fs.nextLine();
                 if (s.matches("^#P.*")) {

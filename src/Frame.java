@@ -2,50 +2,56 @@ import javax.swing.*;
 import java.awt.*;
 public class Frame extends JFrame {
     JPanel2 pannel=new JPanel2();
-    int ll,lc;
-    int taille;
+    int lligne,lcolonne;
 
 
 
-    public Frame(int ll,int lc) {
+    public Frame(List grille) {
         super("Cyka nuggets");
-        this.lc=lc;
-        this.ll=ll;
-        this.taille = /*lc>ll ? lc : ll*/50;
-        setSize(10*2*taille, 10*2*taille);
+        //getContentPane().setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
+        //this.taille = 50;
+        setSize(Toolkit.getDefaultToolkit().getScreenSize());
         setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        pannel.setSize(getContentPane().getPreferredSize().width,getContentPane().getPreferredSize().height);
+        getContentPane().add(pannel);
         //pannel.setLayout(new GridLayout(2*this.ll, 2*lc));
+        lligne = grille.getLongueurLigne();
+        lcolonne = grille.getLongueurColonne();
 
     }
 
     public void dessinerMatrice(List grille){
-        pannel = new JPanel2(grille,taille,taille);
+        getContentPane().remove(pannel);
+        pannel = new JPanel2(grille,lligne,lcolonne);
+        pannel.setSize(0,0);
+        getContentPane().add(pannel);
     }
+
 
 
     class JPanel2 extends JPanel{
 
         List grille;
-        int ligne,colonne;
+        int longLigne,longColonne;
 
         public JPanel2(){
             super();
             grille = null;
-            ligne = colonne = 0;
+            longLigne = longColonne = 0;
 
         }
-        public JPanel2(List grille,int  ligne, int colonne){
+        public JPanel2(List grille,int  longLigne, int longColonne){
             this.grille = grille;
-            this.ligne = ligne;
-            this.colonne = colonne;
+            this.longLigne = longLigne;
+            this.longColonne = longColonne;
         }
 
         @Override
         public void paintComponent(Graphics g){
             Maillon a = grille.tete;
             while(a!=null){
-                g.fillOval(10*(colonne+a.getColonne()),10*(ligne-a.getLigne()),10,10);
+                g.fillOval((getContentPane().getPreferredSize().width+10*longColonne)/2+10*a.getColonne(),(getContentPane().getPreferredSize().height+10*longLigne)/2-10*a.getLigne(),10,10);
                 a=a.getSuiv();
             }
 
