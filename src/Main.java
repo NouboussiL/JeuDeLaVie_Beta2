@@ -11,7 +11,7 @@ public class Main {
     static int taille;
     static Mondes monde;
 
-    public enum Mondes{
+    public enum Mondes {
         CIRCULAIRE,
         FRONTIERE,
         INFINI;
@@ -20,9 +20,6 @@ public class Main {
     public static void main(String[] args) {
 
 
-        //            vv
-        //>>HAHA j'AI MODIFIé LE FICHIER<<
-        //            ^^
 
         /*
         for(int i = 0; i< 5; i++){
@@ -56,36 +53,19 @@ public class Main {
             System.out.print("Taille de la grille : ");
             taille = Integer.parseInt(new Scanner(System.in).next());
         }
-
-
         */
+
         List grille = new List();
-        lireFichier(grille,monde);
+        lireFichier(grille, monde);
         Frame frame = new Frame(grille);
-
-
-        dessinerMatrice(frame,grille);
-
-        System.out.println(frame.getHeight());
-        System.out.println(frame.getWidth());
-
-        System.out.println(grille.toString());
-        try {
-            Thread.sleep(3000);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-        for(int i =0; i <1000; i++){
+        dessinerMatrice(frame, grille);
+        System.out.println(grille);
+        for (int i = 0; i < 1000; i++) {
             grille = genSuivante(grille);
             resetMatrice(frame);
-            dessinerMatrice(frame,grille);
+            dessinerMatrice(frame, grille);
         }
 
-        List ng = genSuivante(grille);
-        System.out.println(ng.toString());
 
 
     }
@@ -102,27 +82,7 @@ public class Main {
     public static void dessinerMatrice(Frame frame, List grille) {
         frame.pannel.removeAll();
         frame.dessinerMatrice(grille);
-/*
-        Maillon a = grille.tete;
 
-        for(int i = 0; i< 2*ll;i++){
-            for(int j = 0; j <2*lc;j++){
-                JButton jb = new JButton();
-                if(a!=null)
-                if((ll+a.getLigne())==i&&(lc+a.getColonne())==j){
-                    System.out.println(i+" "+j+" "+a.toString());
-                    jb.setBackground(Color.BLACK);
-                    a = a.getSuiv();
-                }else{
-                    jb.setVisible(false);
-                }
-                else{
-                    jb.setVisible(false);
-                }
-                frame.pannel.add(jb);
-            }
-        }
-        */
         frame.add(frame.pannel);
         frame.setVisible(true);
         try {
@@ -138,14 +98,14 @@ public class Main {
 
     public static List genSuivante(List grille) {
         List ngen = new List();
-        List declaresMortes =new List();
+        List declaresMortes = new List();
         Maillon a = grille.tete;
 
         while (a != null) {
             int ligne = a.getLigne();
             int colonne = a.getColonne();
 
-            verifierLesMortes(ligne, colonne, grille, ngen,declaresMortes);
+            verifierLesMortes(ligne, colonne, grille, ngen, declaresMortes);
             verifierSurvie(ligne, colonne, grille, ngen);
             a = a.getSuiv();
         }
@@ -153,7 +113,6 @@ public class Main {
     }
 
     private static void verifierLesMortes(int ligne, int colonne, List grille, List ng, List declaresMortes) {
-
 
 
         //couples qui designent les vecteur pour les 8 directions
@@ -184,12 +143,11 @@ public class Main {
                 //alors la case n'est pas dans la grille donc morte,n'as pas encore été
                 // declaré definitivement morte et n'est pas encore été déclaré comme naissante
                 int nbVoisines = calculerVoisines(ligneVoisine, colonneVoisine, grille);
-                if (nbVoisines== 3) {
+                if (nbVoisines == 3) {
                     if (!dansNG)
                         //"its ALIVE!"(nb voisines est 3 et elle est pas encore presente
                         ng.addMaillon(new Maillon(ligneVoisine, colonneVoisine));
-                }else
-                {
+                } else {
                     //elle est morte
                     declaresMortes.addMaillon(new Maillon(ligneVoisine, colonneVoisine));
                 }
@@ -198,26 +156,26 @@ public class Main {
     }
 
     private static void verifierSurvie(int ligne, int colonne, List grille, List ng) {
-        int nbVoisines=calculerVoisines(ligne, colonne, grille);
-        if ( nbVoisines == 2 || nbVoisines == 3)
+        int nbVoisines = calculerVoisines(ligne, colonne, grille);
+        if (nbVoisines == 2 || nbVoisines == 3)
             ng.addMaillon(new Maillon(ligne, colonne));
     }
 
-    public static void lireFichier(List grille,Mondes monde) {
-        int ligneMax,colonneMax,ligneMin,colonneMin;
+    public static void lireFichier(List grille, Mondes monde) {
+        int ligneMax, colonneMax, ligneMin, colonneMin;
         try {
-            if(monde != Mondes.INFINI){
-                ligneMax=colonneMax = taille/2;
-                ligneMin = colonneMin = taille/2+1;
+            if (monde != Mondes.INFINI) {
+                ligneMax = colonneMax = taille / 2;
+                ligneMin = colonneMin = taille / 2 + 1;
 
-            }else{
-                ligneMax=colonneMax = Integer.MAX_VALUE;
+            } else {
+                ligneMax = colonneMax = Integer.MAX_VALUE;
                 ligneMin = colonneMin = Integer.MIN_VALUE;
             }
             int ligne = 0;
             int colonne = 0;
 
-            Scanner fs = new Scanner(new File("lifep/PI.LIF"));
+            Scanner fs = new Scanner(new File("lifep/BARGE.LIF"));
             while (fs.hasNextLine()) {
                 String s = fs.nextLine();
                 if (s.matches("^#P.*")) {
@@ -235,7 +193,7 @@ public class Main {
                     ligne--;
                 }
             }
-            System.out.println(grille.getLongueurLigne()+ "  " + grille.getLongueurColonne());
+            System.out.println(grille.getLongueurLigne() + "  " + grille.getLongueurColonne());
 
             fs.close();
         } catch (FileNotFoundException e) {
