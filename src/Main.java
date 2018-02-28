@@ -23,7 +23,7 @@ public class Main {
 
         List grille = new List();
         lireFichier(grille, monde);
-        Frame frame = new Frame(grille);
+       /* Frame frame = new Frame(grille);
         dessinerMatrice(frame, grille);
         System.out.println(grille);
         try {
@@ -37,7 +37,13 @@ public class Main {
             resetMatrice(frame);
             dessinerMatrice(frame, grille);
         }
-
+*/
+        System.out.println(grille+" init");
+        List[] l = calculerProjections(grille);
+        for (List x : l){
+            System.out.println(x);
+        }
+        System.out.println(calculerSomme(grille,calculerProjections(grille)));
 
 
     }
@@ -65,13 +71,70 @@ public class Main {
         frame.revalidate();
         frame.repaint();
     }
+    public static int min(Maillon[] listM){
+        Maillon min = listM[0];
+        int i=0;
+        for (int j = 0; j < 8; j++) {
+            if (listM[i].compareTo(min) < 0){
+                min = listM[i];
+            i = j;
+            }
+        }
+        return i;
 
+
+    }
     public static List calculerSomme(List grille , List[] projects){
         List somme = new List();
-        
+        Maillon a,b,c,d,e,f,g,h;
+        a=projects[0].tete;
+        b=projects[1].tete;
+        c=projects[2].tete;
+        d=projects[3].tete;
+        e=projects[4].tete;
+        f=projects[5].tete;
+        g=projects[6].tete;
+        h=projects[7].tete;
+        Maillon[] listM= new Maillon[8];
+        for (int i = 0; i < 8; i++) {
+            listM[i]=projects[i].tete;
+        }
+
+        while (!estTraite(listM)){
+
+
+            int min =min(listM);
+            Maillon sm= sommeMaillon(min,listM);
+            somme.addMaillon(sm);
+
+        }
+
 
         return somme;
 
+    }
+
+    private static Maillon sommeMaillon(int min, Maillon[] listM) {
+
+        Maillon m= new Maillon(listM[min].getLigne(),listM[min].getColonne(),0);
+        for (Maillon x : listM){
+            if (x.compareTo(m)==0){
+                m.setNbvois(m.getNbvois()+1);
+                x=x.getSuiv();
+            }
+
+        }
+
+
+        return m;
+
+    }
+
+    private static boolean estTraite(Maillon[] listM) {
+        for (Maillon x :listM){
+            if (x!=null) return false;
+        }
+        return true;
     }
 
 
@@ -110,7 +173,7 @@ public class Main {
             }
             int ligne = 0;
             int colonne = 0;
-            Scanner fs = new Scanner(new File("lifep/ROT8.LIF"));
+            Scanner fs = new Scanner(new File("lifep/TEST.LIF"));
             while (fs.hasNextLine()) {
                 String s = fs.nextLine();
                 if (s.matches("^#P.*")) {

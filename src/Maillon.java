@@ -53,7 +53,7 @@ public class Maillon implements Comparable{
 
     @Override
     public String toString(){
-        return "("+this.ligne+","+this.colonne+")";
+        return "("+this.ligne+","+this.colonne+","+this.nbvois+")";
     }
 
     public int getNbvois() {
