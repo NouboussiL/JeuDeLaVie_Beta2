@@ -10,7 +10,7 @@ public class Frame extends JFrame {
         super("Cyka nuggets");
         //getContentPane().setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
         //this.taille = 50;
-        setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height - 100));
+        setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width-400, Toolkit.getDefaultToolkit().getScreenSize().height - 400));
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         System.out.println(getContentPane().getPreferredSize());

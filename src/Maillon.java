@@ -2,6 +2,7 @@ public class Maillon implements Comparable{
 
     private int ligne;
     private int colonne;
+    private int nbvois;
     private Maillon suiv;
 
 
@@ -11,8 +12,9 @@ public class Maillon implements Comparable{
         suiv = null;
     }
     */
-    public Maillon(int ligne, int colonne){
+    public Maillon(int ligne, int colonne,int nbvois){
         this.ligne = ligne;
+        this.nbvois=nbvois;
         this.colonne = colonne;
         suiv = null;
     }
@@ -52,5 +54,13 @@ public class Maillon implements Comparable{
     @Override
     public String toString(){
         return "("+this.ligne+","+this.colonne+")";
+    }
+
+    public int getNbvois() {
+        return nbvois;
+    }
+
+    public void setNbvois(int nbvois) {
+        this.nbvois = nbvois;
     }
 }

@@ -110,4 +110,26 @@ public class List {
     public int getLongueurLigne(){
         return longueurLigne;
     }
+
+    public static List projeter(List grille, Couple couple) {
+        List l = new List();
+        Maillon a = grille.tete;
+
+        while(a!=null){
+            l.addMaillon(new Maillon(a.getLigne()+couple.getLigne(),a.getColonne()+couple.getColonne(),1));
+            a=a.getSuiv();
+        }
+        return l;
+    }
+
+    public List eliminerNonConformes() {
+        Maillon a = tete;
+        List ng = new List();
+        while(a!=null){
+            if(a.getNbvois()==3 || a.getNbvois()==1002 || a.getNbvois()==1003)
+                ng.addMaillon(new Maillon(a.getLigne(),a.getColonne(),1));
+            a=a.getSuiv();
+        }
+        return ng;
+    }
 }
