@@ -10,7 +10,7 @@ import javax.swing.*;
 public class Main {
     static int taille;
     static Mondes monde;
-
+    static int a=0;
     public enum Mondes {
         CIRCULAIRE,
         FRONTIERE,
@@ -23,31 +23,39 @@ public class Main {
 
         List grille = new List();
         lireFichier(grille, monde);
-       /* Frame frame = new Frame(grille);
+
+
+
+        Frame frame = new Frame(grille);
         dessinerMatrice(frame, grille);
         System.out.println(grille);
         try {
-            Thread.sleep(6000);
+            Thread.sleep(1000);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         for (int i = 0; i < 1000; i++) {
-            grille = genSuivante(grille);
+            grille = nextGen(grille);
+            System.out.println(i+" eme "+grille);
+
             resetMatrice(frame);
             dessinerMatrice(frame, grille);
         }
-*/
-        System.out.println(grille+" init");
-        List[] l = calculerProjections(grille);
-        for (List x : l){
-            System.out.println(x);
-        }
-        System.out.println(calculerSomme(grille,calculerProjections(grille)));
+
 
 
     }
+    public static List nextGen(List grille){
 
+        List ng =calculerSomme(grille,calculerProjections(grille));
+        ng = sommeM0Nbvois(grille,ng);
+        a++;
+        System.out.println(ng+"  "+a+" eme");
+        ng=ng.eliminerNonConformes();
+        return ng;
+
+    }
 
     public static void resetMatrice(Frame frame) {
         frame.remove(frame.pannel);
@@ -63,7 +71,7 @@ public class Main {
         frame.add(frame.pannel);
         frame.setVisible(true);
         try {
-            Thread.sleep(100);
+            Thread.sleep(300);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -75,8 +83,8 @@ public class Main {
         Maillon min = listM[0];
         int i=0;
         for (int j = 0; j < 8; j++) {
-            if (listM[i].compareTo(min) < 0){
-                min = listM[i];
+            if (listM[j]!=null && listM[j].compareTo(min) < 0){
+                min = listM[j];
             i = j;
             }
         }
@@ -117,15 +125,13 @@ public class Main {
     private static Maillon sommeMaillon(int min, Maillon[] listM) {
 
         Maillon m= new Maillon(listM[min].getLigne(),listM[min].getColonne(),0);
-        for (Maillon x : listM){
-            if (x.compareTo(m)==0){
+
+        for (int i = 0; i < 8; i++) {
+            if (listM[i]!=null&&listM[i].compareTo(m)==0) {
                 m.setNbvois(m.getNbvois()+1);
-                x=x.getSuiv();
+                listM[i]=listM[i].getSuiv();
             }
-
         }
-
-
         return m;
 
     }
@@ -136,7 +142,24 @@ public class Main {
         }
         return true;
     }
+    private static List sommeM0Nbvois(List m0, List somme){
+        List m0mille=m0.initM0();
+        Maillon a=m0mille.tete;
+        Maillon b = somme.tete;
+        while (b!=null){
 
+           if(a.compareTo(b)==0){
+               b.setNbvois(b.getNbvois()+1000);
+               a=a.getSuiv();
+           }
+            if(a==null)
+                break;
+
+           b=b.getSuiv();
+
+        }
+        return somme;
+    }
 
     public static List genSuivante(List grille) {
         return grille.eliminerNonConformes();
@@ -173,7 +196,7 @@ public class Main {
             }
             int ligne = 0;
             int colonne = 0;
-            Scanner fs = new Scanner(new File("lifep/TEST.LIF"));
+            Scanner fs = new Scanner(new File("lifep/PI.LIF"));
             while (fs.hasNextLine()) {
                 String s = fs.nextLine();
                 if (s.matches("^#P.*")) {

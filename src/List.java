@@ -126,10 +126,24 @@ public class List {
         Maillon a = tete;
         List ng = new List();
         while(a!=null){
-            if(a.getNbvois()==3 || a.getNbvois()==1002 || a.getNbvois()==1003)
+            if(a.getNbvois()==3 || a.getNbvois()==1002 || a.getNbvois()==1003){
                 ng.addMaillon(new Maillon(a.getLigne(),a.getColonne(),1));
+
+
+            }
             a=a.getSuiv();
         }
         return ng;
+    }
+
+    public List initM0(){
+        List nl= new List();
+        Maillon a = tete;
+
+        while(a!=null){
+            nl.addMaillon(new Maillon(a.getLigne(),a.getColonne(),1000));
+            a=a.getSuiv();
+        }
+        return nl;
     }
 }
