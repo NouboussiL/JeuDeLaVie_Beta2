@@ -13,7 +13,6 @@ public class Frame extends JFrame {
         setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width-400, Toolkit.getDefaultToolkit().getScreenSize().height - 400));
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        System.out.println(getContentPane().getPreferredSize());
 
         getContentPane().add(pannel);
         pannel.setSize(getContentPane().getPreferredSize().width, getContentPane().getPreferredSize().height);
@@ -21,7 +20,6 @@ public class Frame extends JFrame {
         //pannel.setLayout(new GridLayout(2*this.ll, 2*lc));
         lligne = grille.getLongueurLigne();
         lcolonne = grille.getLongueurColonne();
-        System.out.println(lcolonne + " " + lligne);
 
     }
 
@@ -53,7 +51,6 @@ public class Frame extends JFrame {
         @Override
         public void paintComponent(Graphics g) {
             Maillon a = grille.tete;
-            System.out.println((getWidth() - grille.getLongueurLigne()) / 2 + "  " + (getHeight() - grille.getLongueurColonne()) / 2);
 
             while (a != null) {
                 //ne pas chercher à comprendre comment ça marche(!)

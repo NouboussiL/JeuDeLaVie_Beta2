@@ -18,40 +18,30 @@ public class Main {
     }
 
     public static void main(String[] args) {
-
-
-
         List grille = new List();
         lireFichier(grille, monde);
-
-
-
         Frame frame = new Frame(grille);
         dessinerMatrice(frame, grille);
         System.out.println(grille);
         try {
             Thread.sleep(1000);
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         for (int i = 0; i < 1000; i++) {
-            grille = nextGen(grille);
-            System.out.println(i+" eme "+grille);
+            grille=nextGen(grille);
 
-            resetMatrice(frame);
-            dessinerMatrice(frame, grille);
+            /*resetMatrice(frame);
+            dessinerMatrice(frame, grille);*/
         }
-
-
-
     }
-    public static List nextGen(List grille){
 
-        List ng =calculerSomme(grille,calculerProjections(grille));
+    public static List nextGen(List grille){
+        List ng =calculerSomme(calculerProjections(grille));
+        System.out.println(ng);
+
         ng = sommeM0Nbvois(grille,ng);
         a++;
-        System.out.println(ng+"  "+a+" eme");
         ng=ng.eliminerNonConformes();
         return ng;
 
@@ -71,7 +61,7 @@ public class Main {
         frame.add(frame.pannel);
         frame.setVisible(true);
         try {
-            Thread.sleep(300);
+            Thread.sleep(100);
 
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -85,55 +75,37 @@ public class Main {
         for (int j = 0; j < 8; j++) {
             if (listM[j]!=null && listM[j].compareTo(min) < 0){
                 min = listM[j];
-            i = j;
+                i = j;
             }
         }
         return i;
-
-
     }
-    public static List calculerSomme(List grille , List[] projects){
+
+    public static List calculerSomme(List[] projects){
         List somme = new List();
-        Maillon a,b,c,d,e,f,g,h;
-        a=projects[0].tete;
-        b=projects[1].tete;
-        c=projects[2].tete;
-        d=projects[3].tete;
-        e=projects[4].tete;
-        f=projects[5].tete;
-        g=projects[6].tete;
-        h=projects[7].tete;
+
         Maillon[] listM= new Maillon[8];
         for (int i = 0; i < 8; i++) {
             listM[i]=projects[i].tete;
         }
-
         while (!estTraite(listM)){
-
-
             int min =min(listM);
-            Maillon sm= sommeMaillon(min,listM);
+            Maillon sm= chercherVoisins(min,listM);
             somme.addMaillon(sm);
-
         }
-
-
         return somme;
-
     }
 
-    private static Maillon sommeMaillon(int min, Maillon[] listM) {
-
+    private static Maillon chercherVoisins(int min, Maillon[] listM) {
         Maillon m= new Maillon(listM[min].getLigne(),listM[min].getColonne(),0);
-
         for (int i = 0; i < 8; i++) {
             if (listM[i]!=null&&listM[i].compareTo(m)==0) {
                 m.setNbvois(m.getNbvois()+1);
                 listM[i]=listM[i].getSuiv();
             }
         }
-        return m;
 
+        return m;
     }
 
     private static boolean estTraite(Maillon[] listM) {
@@ -142,31 +114,42 @@ public class Main {
         }
         return true;
     }
+
     private static List sommeM0Nbvois(List m0, List somme){
         List m0mille=m0.initM0();
-        Maillon a=m0mille.tete;
-        Maillon b = somme.tete;
-        while (b!=null){
+       /* Maillon b = somme.tete;
 
-           if(a.compareTo(b)==0){
-               b.setNbvois(b.getNbvois()+1000);
-               a=a.getSuiv();
-           }
-            if(a==null)
-                break;
+        while (b!=null ){
+            Maillon a= m0mille.tete;
+            while (a!=null){
+                if(a.compareTo(b)==0){
+                    b.setNbvois(b.getNbvois()+1000);
+                    break;
+                }
+                a=a.getSuiv();
+            }
+            b=b.getSuiv();
+        }*/
 
-           b=b.getSuiv();
-
+        Maillon a= m0mille.tete;
+        while (a!=null){
+            Maillon b = somme.tete;
+            while(b!=null){
+                if(a.compareTo(b)==0){
+                    b.setNbvois(b.getNbvois()+1000);
+                    break;
+                }
+                b=b.getSuiv();
+            }
+                a=a.getSuiv();
         }
+
+
         return somme;
     }
 
-    public static List genSuivante(List grille) {
-        return grille.eliminerNonConformes();
-    }
 
     private static List[] calculerProjections( List grille) {
-
     List [] project = new List[8];
         //couples qui designent les vecteur pour les 8 directions
         Couple[] tc = {
@@ -196,7 +179,7 @@ public class Main {
             }
             int ligne = 0;
             int colonne = 0;
-            Scanner fs = new Scanner(new File("lifep/PI.LIF"));
+            Scanner fs = new Scanner(new File("lifep/ACORN.LIF"));
             while (fs.hasNextLine()) {
                 String s = fs.nextLine();
                 if (s.matches("^#P.*")) {
@@ -214,7 +197,6 @@ public class Main {
                     ligne--;
                 }
             }
-            System.out.println(grille.getLongueurLigne() + "  " + grille.getLongueurColonne());
             fs.close();
         } catch (FileNotFoundException e) {
             System.out.print(e.getMessage());
