@@ -1,10 +1,13 @@
-public class Maillon implements Comparable{
+public class Maillon<T> implements Comparable{
 
-    private int ligne;
-    private int colonne;
-    private int nbvois;
+    private T info;
     private Maillon suiv;
 
+
+    public Maillon(){
+        info = null;
+        suiv = null;
+    }
 
     /*
     public Maillon(Couple i){
@@ -12,22 +15,16 @@ public class Maillon implements Comparable{
         suiv = null;
     }
     */
-    public Maillon(int ligne, int colonne,int nbvois){
-        this.ligne = ligne;
-        this.nbvois=nbvois;
-        this.colonne = colonne;
+    public Maillon(T info){
+        this.info = info;
         suiv = null;
     }
 
 
-
-    public int getLigne(){
-        return ligne;
+    public T getInfo(){
+        return this.info;
     }
 
-    public int getColonne(){
-        return colonne;
-    }
 
     public void setSuivant(Maillon i){
         this.suiv = i;
@@ -36,15 +33,8 @@ public class Maillon implements Comparable{
     public int compareTo(Object o){
         if (this == o) return 0;
         if (o == null || getClass() != o.getClass()) return -1;
-        Maillon other = (Maillon) o;
-        if(other.getLigne() < this.ligne)return 1;
-        if(ligne == other.getLigne()) {
-            if (other.getColonne() < colonne)
-                return 1;
-            else
-                return (other.getColonne() == colonne ? 0 : -1);
-        }
-        return -1;
+        Maillon other = (Maillon)o;
+        return info.compareTo(other.getInfo());
     }
 
     public Maillon getSuiv() {
@@ -53,14 +43,7 @@ public class Maillon implements Comparable{
 
     @Override
     public String toString(){
-        return "("+this.ligne+","+this.colonne+","+this.nbvois+")";
+        return info.toString();
     }
 
-    public int getNbvois() {
-        return nbvois;
-    }
-
-    public void setNbvois(int nbvois) {
-        this.nbvois = nbvois;
-    }
 }

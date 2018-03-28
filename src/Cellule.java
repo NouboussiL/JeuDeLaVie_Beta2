@@ -1,11 +1,18 @@
-public class Cellule {
+public class Cellule implements Comparable{
 
     private int ligne;
     private int colonne;
     private int nbvois;
 
 
+    public int getLigne(){
+        return ligne;
+    }
 
+
+    public int getColonne(){
+        return colonne;
+    }
 
 
 
@@ -13,7 +20,7 @@ public class Cellule {
     public int compareTo(Object o){
         if (this == o) return 0;
         if (o == null || getClass() != o.getClass()) return -1;
-        Maillon other = (Maillon) o;
+        Cellule other = (Cellule) o;
         if(other.getLigne() < this.ligne)return 1;
         if(ligne == other.getLigne()) {
             if (other.getColonne() < colonne)
