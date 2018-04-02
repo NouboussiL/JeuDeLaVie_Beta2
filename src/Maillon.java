@@ -1,6 +1,6 @@
-public class Maillon<T> implements Comparable{
+public class Maillon<T extends Comparable<T>> implements Comparable{
 
-    private T info;
+    private  T info;
     private Maillon suiv;
 
 
@@ -34,7 +34,8 @@ public class Maillon<T> implements Comparable{
         if (this == o) return 0;
         if (o == null || getClass() != o.getClass()) return -1;
         Maillon other = (Maillon)o;
-        return info.compareTo(other.getInfo());
+        T infoOther = (T)other.getInfo();
+        return info.compareTo(infoOther);
     }
 
     public Maillon getSuiv() {

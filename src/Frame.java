@@ -18,8 +18,8 @@ public class Frame extends JFrame {
         pannel.setSize(getContentPane().getPreferredSize().width, getContentPane().getPreferredSize().height);
 
         //pannel.setLayout(new GridLayout(2*this.ll, 2*lc));
-        lligne = grille.getLongueurLigne();
-        lcolonne = grille.getLongueurColonne();
+        //lligne = grille.getLongueurLigne();
+        //lcolonne = grille.getLongueurColonne();
 
     }
 
@@ -50,12 +50,12 @@ public class Frame extends JFrame {
 
         @Override
         public void paintComponent(Graphics g) {
-            Maillon a = grille.tete;
+            Maillon a = grille.getTete();
 
             while (a != null) {
                 //ne pas chercher à comprendre comment ça marche(!)
-                g.fillOval((getWidth() - grille.getLongueurLigne()) / 2 + a.getColonne() * 7,
-                        (getHeight() - grille.getLongueurColonne()) / 2 - a.getLigne() * 7, 7, 7);
+                g.fillOval((getWidth()) /*- grille.getLongueurLigne()) / 2 + a.getColonne() * 7*/,
+                        (getHeight()) /*- grille.getLongueurColonne()) / 2 - a.getLigne() * 7*/, 7, 7);
                 a = a.getSuiv();
             }
         }

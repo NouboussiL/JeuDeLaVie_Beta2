@@ -5,6 +5,19 @@ public class Cellule implements Comparable{
     private int nbvois;
 
 
+
+    public Cellule(int ligne, int colonne){
+        this.ligne = ligne;
+        this.colonne = colonne;
+        this.nbvois = 1;
+    }
+
+    public Cellule(int ligne, int colonne,int nbVoisins){
+        this(ligne,colonne);
+        this.nbvois = nbVoisins;
+    }
+
+
     public int getLigne(){
         return ligne;
     }
